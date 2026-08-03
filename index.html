@@ -208,6 +208,16 @@ nav{display:flex;background:var(--surface);border-top:1px solid var(--border);pa
 .tab svg{width:22px;height:22px;stroke-width:2;fill:none;stroke:currentColor}
 .tab.active{color:var(--accent)}
 
+
+.sent-ko{font-size:24px;font-weight:700;text-align:center;line-height:1.35;margin-bottom:6px}
+.sent-rule{font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px;margin-bottom:18px}
+.ans-zone{min-height:56px;width:100%;border-bottom:2px dashed var(--border);display:flex;flex-wrap:wrap;gap:8px;padding:8px 4px;align-content:flex-start;justify-content:center}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:16px 0 0}
+.tok{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:11px 15px;font-size:20px;font-weight:600;transition:transform .1s}
+.tok:active{transform:scale(.94)}
+.tok.bank-tok{background:var(--surface);border-color:var(--faint)}
+.gq-sent{font-size:30px;font-weight:700;letter-spacing:1px;line-height:1.3}
+.opt.gq span:first-child{font-size:19px}
 .t1{color:var(--t1)}.t2{color:var(--t2)}.t3{color:var(--t3)}.t4{color:var(--t4)}.t0{color:var(--t0)}
 .fade{animation:fade .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -236,6 +246,8 @@ nav{display:flex;background:var(--surface);border-top:1px solid var(--border);pa
       <button class="hcard" data-mode="write"><div class="ic">✍️</div><div class="tt"><h3>한자 쓰기</h3><p>획순 따라쓰기 · 손가락으로 연습</p></div><div class="ar">›</div></button>
       <button class="hcard" data-mode="listen"><div class="ic">🎧</div><div class="tt"><h3>듣기</h3><p>소리 듣고 한자 고르기 · 자동 채점</p></div><div class="ar">›</div></button>
       <button class="hcard" data-mode="speak"><div class="ic">🗣️</div><div class="tt"><h3>말하기</h3><p>발음 듣고 따라 말하기</p></div><div class="ar">›</div></button>
+      <button class="hcard" data-mode="sentence"><div class="ic">🧩</div><div class="tt"><h3>문장 만들기</h3><p>단어 순서 맞추기 · 어순 훈련</p></div><div class="ar">›</div></button>
+      <button class="hcard" data-mode="gquiz"><div class="ic">📐</div><div class="tt"><h3>문법 퀴즈</h3><p>O/X·빈칸으로 약점 문법 점검</p></div><div class="ar">›</div></button>
       <button class="hcard" data-mode="review"><div class="ic">🔁</div><div class="tt"><h3>복습</h3><p>틀렸거나 복습할 단어만 모아서</p></div><div id="review-badge"></div><div class="ar">›</div></button>
       <div style="height:24px"></div>
     </div>
@@ -358,6 +370,48 @@ const RULES=[
 ["양사 정리","<code>个</code> 만능 · <code>杯</code> 마시는 것 · <code>节</code> 수업 · <code>碗</code> 그릇<br><span class='ok-ex'>一个手机 · 两杯奶茶 · 三节课 · 一碗饭</span>"],
 ];
 
+
+const SENTENCES=[
+{t:["我","昨天","看","了","电影"],ko:"나 어제 영화 봤어",rule:"시간+동사·了"},
+{t:["我","太","累","了"],ko:"나 너무 피곤해",rule:"太…了 세트"},
+{t:["你","吃","过","烤肉","吗"],ko:"너 고기 먹어봤어?",rule:"过·吗"},
+{t:["因为","我","饿","了","所以","我","去","饭馆"],ko:"배고파서 식당에 가",rule:"因为…所以"},
+{t:["洗手间","在","哪里"],ko:"화장실 어디예요?",rule:"의문사+吗 금지"},
+{t:["我","喝","了","两","杯","咖啡"],ko:"나 커피 두 잔 마셨어",rule:"수량+了 위치"},
+{t:["我","不","知道","他","在","哪里"],ko:"걔 어디 있는지 몰라",rule:"不知道·평서문"},
+{t:["你","几","号","来"],ko:"너 며칠에 와?",rule:"시간 어순"},
+{t:["我","下午","要","休息"],ko:"나 오후에 쉬려고",rule:"시간+동사"},
+{t:["他","是","我","的","新","同学"],ko:"그는 내 새 동급생이야",rule:"的·어순"},
+{t:["我","没","去","过","那个","超市"],ko:"나 그 슈퍼 안 가봤어",rule:"没…过"},
+{t:["你","今天","忙","吗"],ko:"너 오늘 바빠?",rule:"吗"},
+{t:["我们","都","去","过","火车站"],ko:"우리 다 기차역 가봤어",rule:"都·过"},
+{t:["我","觉得","这个","很","漂亮"],ko:"이거 예쁜 것 같아",rule:"很"},
+{t:["这个","电影","怎么样"],ko:"이 영화 어때?",rule:"怎么样"},
+{t:["我","要","喝","绿茶"],ko:"나 녹차 마실래",rule:"要"},
+{t:["他","常常","去","酒吧"],ko:"그는 자주 술집에 가",rule:"常常"},
+{t:["我","的","钱包","在","这里"],ko:"내 지갑 여기 있어",rule:"在·的"},
+{t:["我","昨天","上午","工作","了"],ko:"나 어제 오전에 일했어",rule:"시간+了"},
+{t:["你","是","谁"],ko:"너 누구야?",rule:"谁"}
+];
+const GQUIZ=[
+{type:"ox",q:"太累。",a:false,ex:"太…了 세트 → 太累了 (了 필요)"},
+{type:"ox",q:"我没吃过了。",a:false,ex:"没 뒤엔 了 안 붙임 → 我没吃过"},
+{type:"ox",q:"洗手间在哪里吗？",a:false,ex:"의문사(哪里)+吗 금지 → …在哪里？"},
+{type:"ox",q:"我喝了两杯咖啡。",a:true,ex:"수량 있어 了가 동사 뒤 — 맞음"},
+{type:"ox",q:"你要吃过吗？",a:false,ex:"要+过 금지 → 你吃过吗"},
+{type:"ox",q:"我太工作了。",a:false,ex:"太는 형용사에만 → 太忙了 (工作는 동사)"},
+{type:"ox",q:"我们都去过火车站。",a:true,ex:"都·过 어순 맞음"},
+{type:"ox",q:"我饿了。",a:true,ex:"상태변화 了 — 맞음"},
+{type:"choice",q:"빈칸: 我___两杯奶茶 (마셨다)",opts:["喝了","了喝","喝过"],a:0,ex:"수량 있어 喝了 (동사+了)"},
+{type:"choice",q:"'너 밀크티 마셔봤어?'",opts:["你要喝过奶茶吗","你喝过奶茶吗"],a:1,ex:"경험은 过, 要 빼기"},
+{type:"choice",q:"빈칸: 你___来？ (며칠에)",opts:["几号","来几号"],a:0,ex:"시간은 동사 앞 → 你几号来"},
+{type:"choice",q:"'모른다'",opts:["不道知","不知道","没知道"],a:1,ex:"不知道"},
+{type:"choice",q:"'그 의사'",opts:["那大夫","那个大夫"],a:1,ex:"那+个+명사"},
+{type:"choice",q:"빈칸: 因为我饿了，___我去吃饭",opts:["所以","因为","但是"],a:0,ex:"因为…所以"},
+{type:"choice",q:"'나 배고파졌어'",opts:["我饿","我饿了"],a:1,ex:"상태변화 了"},
+{type:"choice",q:"'그 슈퍼 안 가봤어'",opts:["我不去过超市","我没去过超市"],a:1,ex:"경험 부정은 没…过"}
+];
+
 /* ===== 저장 ===== */
 const KEY="han_srs_v1";let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):fresh();}catch(e){return mem||(mem=fresh());}}
@@ -376,6 +430,7 @@ function grade(h,correct){const st=cardState(h);st.seen++;S.totalAns++;
   if(correct){st.cor++;S.totalCor++;st.box=Math.min(st.box+1,5);if(navigator.vibrate)navigator.vibrate(8);}
   else{st.wr++;st.box=0;if(navigator.vibrate)navigator.vibrate([10,40,10]);}
   st.due=now()+INTERVALS[st.box];S.todayCount++;rollDay();save(S);updateGoal();return st;}
+function gradeMisc(correct){S.totalAns++;if(correct)S.totalCor++;S.todayCount++;rollDay();save(S);updateGoal();}
 
 /* ===== 커리큘럼 ===== */
 function planActive(){return !!(S.plan&&S.plan.track);}
@@ -430,7 +485,7 @@ function switchPanel(which){
   document.getElementById('planview').classList.toggle('on',which==='plan');
 }
 function openMode(mode){curMode=mode;
-  const titles={mixed:'오늘의 학습',write:'한자 쓰기',listen:'듣기',speak:'말하기',review:'복습'};
+  const titles={mixed:'오늘의 학습',write:'한자 쓰기',listen:'듣기',speak:'말하기',review:'복습',sentence:'문장 만들기',gquiz:'문법 퀴즈'};
   document.getElementById('rtitle').textContent=titles[mode];document.getElementById('rmini').textContent='';
   switchPanel('runner');nextItem();}
 function closeMode(){if('speechSynthesis'in window)speechSynthesis.cancel();switchPanel('home');updateHome();}
@@ -442,7 +497,9 @@ function nextItem(){
   if(curMode==='mixed'||curMode==='review')return renderMC();
   if(curMode==='write')return renderWrite();
   if(curMode==='listen')return renderListen();
-  if(curMode==='speak')return renderSpeak();}
+  if(curMode==='speak')return renderSpeak();
+  if(curMode==='sentence')return renderSentence();
+  if(curMode==='gquiz')return renderGQuiz();}
 
 /* MC */
 function renderMC(){answered=false;
@@ -476,7 +533,7 @@ function renderWrite(){
       <div class="write-hint"><div class="wm">${cur.m}</div><div class="wp">${colorPinyin(cur.p)}</div></div>
       <div class="wprog" id="wprog">획순을 따라 써보세요 · 1 / ${W_chars.length}</div>
       <div class="wboxes" id="wboxes">${W_chars.map((c,i)=>`<div class="wbox" id="wb${i}"></div>`).join('')}</div></div>
-    <div class="wtools"><button class="btn ghost" id="w-demo">획순 보기</button><button class="btn ghost" id="w-skip">건너뛰기</button></div>
+    <div class="wtools"><button class="btn ghost" id="w-demo">획순 보기</button><button class="btn ghost" id="w-hide">힌트 숨기기</button><button class="btn ghost" id="w-skip">건너뛰기</button></div>
     <div class="reveal" id="reveal"></div>`;
   const writers=W_chars.map((c,i)=>HanziWriter.create('wb'+i,c,{width:118,height:118,padding:6,showOutline:true,
     strokeColor:'#F2F2F3',outlineColor:'#3a3a40',drawingColor:'#FF2442',drawingWidth:22,
@@ -487,7 +544,9 @@ function renderWrite(){
     writers[idx].quiz({showHintAfterMisses:3,onMistake:()=>{miss++;},
       onComplete:()=>{document.getElementById('wb'+idx).classList.add('done');idx++;setTimeout(quizChar,250);}});}
   document.getElementById('w-demo').onclick=()=>writers[idx]&&writers[idx].animateCharacter();
-  document.getElementById('w-skip').onclick=()=>finishWrite(99);quizChar();}
+  document.getElementById('w-skip').onclick=()=>finishWrite(99);
+  let hid=false;document.getElementById('w-hide').onclick=()=>{hid=!hid;writers.forEach(w=>hid?w.hideOutline():w.showOutline());document.getElementById('w-hide').textContent=hid?'힌트 보이기':'힌트 숨기기';};
+  quizChar();}
 function finishWrite(miss){const ok=miss<=W_chars.length+1;const st=grade(cur.h,ok);
   const star='★'.repeat(st.box)+'☆'.repeat(5-st.box);
   document.getElementById('reveal').innerHTML=`<div class="rv-pinyin" style="color:${ok?'var(--ok)':'var(--muted)'}">${ok?'잘했어요! ✍️':'연습 완료'} · ${cur.h} ${star}</div><button class="btn" id="next-btn">다음 →</button>`;
@@ -519,6 +578,46 @@ function renderSpeak(){cur=pickCard();
   const play=()=>speak(cur.h);document.getElementById('play').onclick=play;setTimeout(play,350);
   document.getElementById('g-ok').onclick=()=>{grade(cur.h,true);nextItem();};
   document.getElementById('g-again').onclick=()=>{grade(cur.h,false);nextItem();};}
+
+/* 문장 만들기 */
+let curSent=null,sBank=[],sAns=[];
+function renderSentence(){curSent=SENTENCES[(Math.random()*SENTENCES.length)|0];sAns=[];sBank=shuffle(curSent.t.slice());paintSentence();}
+function paintSentence(locked){
+  runArea().innerHTML=`<div class="card fade" style="justify-content:flex-start;padding-top:34px">
+      <div class="qtype">문장 만들기</div><div class="sent-ko">${curSent.ko}</div>
+      <div class="sent-rule">${curSent.rule}</div><div class="ans-zone" id="ans"></div></div>
+    <div class="bank" id="bank"></div>
+    <div class="reveal" id="reveal"><button class="btn" id="check" ${sAns.length&&!locked?'':'disabled'}>확인</button></div>`;
+  const ans=document.getElementById('ans'),bank=document.getElementById('bank');
+  sAns.forEach((tk,i)=>{const b=document.createElement('button');b.className='tok';b.textContent=tk;
+    if(!locked)b.onclick=()=>{sBank.push(tk);sAns.splice(i,1);paintSentence();};ans.appendChild(b);});
+  sBank.forEach((tk,i)=>{const b=document.createElement('button');b.className='tok bank-tok';b.textContent=tk;
+    if(!locked)b.onclick=()=>{sAns.push(tk);sBank.splice(i,1);paintSentence();};bank.appendChild(b);});
+  const chk=document.getElementById('check');if(chk&&!locked){chk.disabled=!sAns.length;chk.onclick=checkSentence;}}
+function checkSentence(){const ok=sAns.join('')===curSent.t.join('');gradeMisc(ok);paintSentence(true);
+  document.getElementById('reveal').innerHTML=`<div class="rv-pinyin" style="color:${ok?'var(--ok)':'var(--accent)'}">${ok?'정답! ✓':'다시 보기'} · ${curSent.t.join('')}</div>
+    <div class="rv-pinyin" style="color:var(--faint);font-size:12px">${curSent.rule}</div><button class="btn" id="next-btn">다음 →</button>`;
+  document.getElementById('next-btn').onclick=nextItem;}
+
+/* 문법 퀴즈 */
+function renderGQuiz(){answered=false;const q=GQUIZ[(Math.random()*GQUIZ.length)|0];
+  if(q.type==='ox'){
+    runArea().innerHTML=`<div class="card fade"><div class="qtype">문법 퀴즈 · O/X</div><div class="gq-sent">${q.q}</div>
+      <div class="card-hint">이 문장이 맞으면 ⭕, 틀리면 ❌</div></div>
+      <div class="options" id="opts"><button class="opt gq" data-v="1"><span>⭕ 맞다</span><span class="mark"></span></button>
+      <button class="opt gq" data-v="0"><span>❌ 틀리다</span><span class="mark"></span></button></div><div class="reveal" id="reveal"></div>`;
+    document.querySelectorAll('#opts .opt').forEach(b=>b.onclick=()=>gqAnswer(b,(b.dataset.v==='1')===q.a,q));
+  }else{
+    runArea().innerHTML=`<div class="card fade"><div class="qtype">문법 퀴즈 · 빈칸</div><div class="gq-sent">${q.q}</div></div>
+      <div class="options" id="opts">${q.opts.map((o,i)=>`<button class="opt gq" data-i="${i}"><span>${o}</span><span class="mark"></span></button>`).join('')}</div><div class="reveal" id="reveal"></div>`;
+    document.querySelectorAll('#opts .opt').forEach(b=>b.onclick=()=>gqAnswer(b,+b.dataset.i===q.a,q));}}
+function gqAnswer(btn,correct,q){if(answered)return;answered=true;gradeMisc(correct);
+  document.querySelectorAll('#opts .opt').forEach(b=>b.onclick=null);
+  btn.classList.add(correct?'correct':'wrong');btn.querySelector('.mark').textContent=correct?'정답':'✕';
+  document.getElementById('reveal').innerHTML=`<div class="rv-pinyin" style="color:${correct?'var(--ok)':'var(--accent)'}">${correct?'정답! ✓':'오답'}</div>
+    <div class="rv-pinyin" style="color:var(--muted);font-size:13px">💡 ${q.ex}</div><button class="btn" id="next-btn">다음 →</button>`;
+  document.getElementById('next-btn').onclick=nextItem;}
+
 
 /* ===== 홈/플랜 렌더 ===== */
 function updateGoal(){const c=Math.min(S.todayCount,GOAL);
