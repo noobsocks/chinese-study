@@ -1,5 +1,5 @@
-const CACHE='han-v1';
-const ASSETS=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./hanzi-data.js','./hanzi-writer.min.js'];
+const CACHE='han-v2';
+const ASSETS=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./hanzi-data.js','./radical-data.js','./hanzi-writer.min.js'];
 
 self.addEventListener('install',e=>{
   self.skipWaiting();
